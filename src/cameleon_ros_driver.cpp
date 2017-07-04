@@ -2,11 +2,13 @@
 #include <tf/tf.h>
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
+#include <std_msgs/Float32.h>
 #include "CMessageClient.h"
 #include <string.h>
 #include <boost/thread/thread.hpp>
 
 ros::Subscriber commandSub;
+ros::Publisher flipperPub;
 ros::Publisher odometryPub;
 
 //robot Parameters
@@ -18,6 +20,7 @@ CMessage message;
 CMessageClient client;
 CStatusMessage status;
 nav_msgs::Odometry odometry;
+std_msgs::Float32 flipperPosition;
 
 bool lastOdoValid = false;
 double px = 0;
@@ -49,7 +52,9 @@ void updateOdometry(CStatusMessage status)
 		odometry.pose.pose.orientation.y = orientation[1];
 		odometry.pose.pose.orientation.z = orientation[2];
 		odometry.pose.pose.orientation.w = orientation[3];
-		odometryPub.publish(odometry); 
+		odometryPub.publish(odometry);
+		flipperPosition.data = status.flipperPos*M_PI/180.0;
+		flipperPub.publish(flipperPosition); 
 	}
 	lastOdoLeft = odoLeft;
 	lastOdoRight = odoRight;
@@ -102,7 +107,8 @@ int main(int argc, char** argv)
 
 	//create the robot
 	odometryPub = n.advertise<nav_msgs::Odometry>("/odom", 1);
-	commandSub = n.subscribe("/cmd_vel", 1, commandCallback);
+	flipperPub = n.advertise<std_msgs::Float32>("/flipperPosition", 1);
+	commandSub = n.subscribe("/cameleon/cmd_vel", 1, commandCallback);
 
 	ros::spin();
 }
