@@ -91,6 +91,7 @@ void commandCallback(const geometry_msgs::Twist::ConstPtr& msg)
 
 void flipperCallback(const std_msgs::Float32::ConstPtr& msg)
 {
+	message.type = MSG_SPEED;
 	message.flipper = (int)(msg->data*1000);
 	client.sendMessage(message);
 }
@@ -109,6 +110,7 @@ int main(int argc, char** argv)
 	printf("%f",maxTurnSpeed);
 	bool requier[2] = {true, true};
 	client.init(robotIP.c_str(), robotPort, requier);
+	message.forward = message.turn = message.flipper = 0; 
 
 	boost::thread thread_b(readData);
 
