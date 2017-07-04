@@ -8,6 +8,7 @@
 #include <boost/thread/thread.hpp>
 
 ros::Subscriber commandSub;
+ros::Subscriber flipperSub;
 ros::Publisher flipperPub;
 ros::Publisher odometryPub;
 
@@ -79,7 +80,7 @@ void commandCallback(const geometry_msgs::Twist::ConstPtr& msg)
 	message.type = MSG_SPEED;
 	message.forward = (int)(msg->linear.x*1000);
 	message.turn = (int)(msg->angular.z*1000);
-	message.flipper = (int)(msg->angular.y*1000);
+	//message.flipper = (int)(msg->angular.y*1000);
 
 	if (message.forward > +maxForwardSpeed*1000) message.forward = maxForwardSpeed*1000;
 	if (message.forward < -maxBackwardSpeed*1000) message.forward = -maxBackwardSpeed*1000;
@@ -87,7 +88,13 @@ void commandCallback(const geometry_msgs::Twist::ConstPtr& msg)
 	if (message.turn    < -maxTurnSpeed*1000) message.turn = -maxTurnSpeed*1000;
 	client.sendMessage(message);
 }
-     
+
+void flipperCallback(const std_msgs::Float32::ConstPtr& msg)
+{
+	message.flipper = (int)(msg->data*1000);
+	client.sendMessage(message);
+}
+ 
 int main(int argc, char** argv)
 {
 	ros::init(argc, argv, "cameleon_ros_driver");
@@ -108,6 +115,7 @@ int main(int argc, char** argv)
 	//create the robot
 	odometryPub = n.advertise<nav_msgs::Odometry>("/odom", 1);
 	flipperPub = n.advertise<std_msgs::Float32>("/flipperPosition", 1);
+	flipperSub = n.subscribe("/flipperVelocity", 1, flipperCallback);
 	commandSub = n.subscribe("/cameleon/cmd_vel", 1, commandCallback);
 
 	ros::spin();
