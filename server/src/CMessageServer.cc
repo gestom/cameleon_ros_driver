@@ -132,12 +132,11 @@ CMessage CMessageServer::getMessage(int timeout)
 			}
 		}
 	}
+	result.type = MSG_NONE;
 	if (!incomingMessages.empty()) {
 		result = incomingMessages.front();
 		incomingMessages.pop_front();
 		messageRead++; 
-	} else {
-		result.type = MSG_NONE;
 	}
 	pthread_mutex_unlock(&dataMutex);
 	return result;
