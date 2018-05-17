@@ -162,7 +162,8 @@ void hand2(CMessage & message)
 
 void * odometry_thread(void *);
 
-int main(int argc, char ** argv) {
+int main(int argc, char ** argv) 
+{
 	CMessage message;
 	CMessageClient client;
 	bool requier[2] = {true, true};
@@ -195,9 +196,9 @@ int main(int argc, char ** argv) {
 	while (state != QUIT) {
 		client.sendMessage(message);
 		fprintf(stdout,"Command: %s % 5i%c % 5i % 5i\n", message.getStrType(),
-			message.forward,
-			joystick.buttonPressed(GP_L2) ? '*' : ' ',
-			message.turn, message.flipper);
+				message.forward,
+				joystick.buttonPressed(GP_L2) ? '*' : ' ',
+				message.turn, message.flipper);
 		usleep(50 * 1000);
 		if (client.checkForStatus(status) == 0) { // TODO: should not be called here, as it is called from odometry_thread
 			fprintf(stdout, " Status: %d battery=%3d%%\n", status.status, status.batteryLevel);
