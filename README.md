@@ -1,5 +1,7 @@
-## ROS driver for Cameleon E / UGV / Unmanned Ground Vehicle
+## ROS driver for John Deere tractor
 
+This is work in progress.
+ 
 The ROS driver consists of two binaries, where one runs on the robot and the other locally.
 To make it work, do the following.
 
