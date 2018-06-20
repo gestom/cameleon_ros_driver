@@ -11,7 +11,7 @@ import struct
 
 #HOST = ''                 # Symbolic name meaning all available interfaces
 #PORT = 50007              # Arbitrary non-privileged port
-HOST = '147.32.83.170'
+HOST = '127.0.0.1'
 PORT = 50004
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
