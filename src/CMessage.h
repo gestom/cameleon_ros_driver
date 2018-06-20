@@ -43,30 +43,30 @@ class CMessage {
 
 class CStatusMessage
 {
-public:
-	TMessageType type;
+	public:
+		TMessageType type;
 
-	int status;
-	int odoLeft;
-	int odoRight;
-	int pitch;
-	int roll;
-	int flipperPos;
-	int batteryLevel;
+		int status;
+		int odoLeft;
+		int odoRight;
+		int pitch;
+		int roll;
+		int flipperPos;
+		int batteryLevel;
 
-	CStatusMessage();
-	void pack();
-	void unpack();
-	unsigned char * getSerializedData() { return buffer; }
-	int getSerializedLength() { return serializedLength; }
-	int getExpectedLength() { return 29; }
+		CStatusMessage();
+		void pack();
+		void unpack();
+		unsigned char * getSerializedData() { return buffer; }
+		int getSerializedLength() { return serializedLength; }
+		int getExpectedLength() { return 29; }
 
-protected:
-	void packInt(int value);
-	void unpackInt(int & value, int & ptr);
-private:
-	unsigned char buffer[32];
-	int serializedLength;
+	protected:
+		void packInt(int value);
+		void unpackInt(int & value, int & ptr);
+	private:
+		unsigned char buffer[32];
+		int serializedLength;
 };
 
 #endif

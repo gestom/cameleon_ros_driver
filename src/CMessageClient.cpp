@@ -38,15 +38,16 @@ int CMessageClient::init(const char *ip,const int port,bool requirements[])
       memcpy((char *) &server_addr.sin_addr.s_addr,host_info->h_addr_list[0], host_info->h_length);
       server_addr.sin_port = htons(port);
       result = connect(mySocket,(struct sockaddr*) &server_addr,sizeof(server_addr));
+      fprintf(stdout,"Network info %s %i\n",ip,port);
     }
     if (result == 0)
     {
 	    if (send(mySocket,requirements,4*sizeof(bool),MSG_NOSIGNAL) == 4*sizeof(bool)) return 0; else
 	    {
-//		    dump->Error(module,"Network error when sending info");
+		    fprintf(stdout,"Network error when sending info\n");
 		    return -1;
 	    }
-//	    dump->Inform(module,"Connection established.");
+	    fprintf(stdout,"Connection established.\n");
 //	    message.type = MSG_START;
 //	    sendMessage(&message);
     }
@@ -110,8 +111,8 @@ int CMessageClient::checkForStatus(CStatusMessage & status)
   int result;
   int lengthReceived = recv(mySocket, status.getSerializedData(), status.getExpectedLength(), NETWORK_BLOCK);
 
-  //printf("CMessageClient::recv %d:", lengthReceived);
-  //for (int i=0; i<lengthReceived; i++) printf(" %02X", (int)(status.getSerializedData()[i])); printf("\n");
+  printf("CMessageClient::recv %d:", lengthReceived);
+  for (int i=0; i<lengthReceived; i++) printf(" %02X", (int)(status.getSerializedData()[i])); printf("\n");
 
   if (lengthReceived == status.getExpectedLength()) {
 	  status.unpack();
@@ -123,6 +124,7 @@ int CMessageClient::checkForStatus(CStatusMessage & status)
   } else {
 	  result = -2;
   }
+  printf("CMessageClient status %i\n", result);
   return result;
 }
 
