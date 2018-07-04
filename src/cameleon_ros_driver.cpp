@@ -50,7 +50,7 @@ void updateOdometry(CStatusMessage status)
 		odometry.pose.pose.position.x = px;
 		odometry.pose.pose.position.y = py;
 		tf::Quaternion orientation;
-	        orientation.setRPY((float)status.roll*M_PI/180,(float)status.pitch*M_PI/180,heading);
+		orientation.setRPY((float)status.roll*M_PI/180,(float)status.pitch*M_PI/180,heading);
 		odometry.pose.pose.orientation.x = orientation[0];
 		odometry.pose.pose.orientation.y = orientation[1];
 		odometry.pose.pose.orientation.z = orientation[2];
