@@ -47,8 +47,8 @@ void updateOdometry(CStatusMessage status)
 		px += dForward * cos(heading);
 		py += dForward * sin(heading);
 
-		odometry.pose.pose.position.x = px;
-		odometry.pose.pose.position.y = py;
+		odometry.pose.pose.position.x = px*2.0;
+		odometry.pose.pose.position.y = py*2.0;
 		tf::Quaternion orientation;
 	        orientation.setRPY((float)status.roll*M_PI/180,(float)status.pitch*M_PI/180,heading);
 		odometry.pose.pose.orientation.x = orientation[0];
@@ -83,7 +83,7 @@ void commandCallback(const geometry_msgs::Twist::ConstPtr& msg)
 {
 	message.type = MSG_SPEED;
 	message.forward = (int)(msg->linear.x*1000);
-	message.turn = (int)(msg->angular.z*1000);
+	message.turn = (int)(msg->angular.z*1000)-15;
 	message.flipper = (int)(msg->angular.y*1000);
 	if (message.forward > +maxForwardSpeed*1000) message.forward = maxForwardSpeed*1000;
 	if (message.forward < -maxBackwardSpeed*1000) message.forward = -maxBackwardSpeed*1000;
@@ -100,8 +100,9 @@ int main(int argc, char** argv)
 	ros::NodeHandle n("~");
 
 	//initialize robot model parameters
-	n.param("cameleon_port",robotPort,50004);
-	n.param("cameleon_ip",robotIP,std::string("172.43.50.193"));
+	n.param("cameleon_port",robotPort,50018);
+	//n.param("cameleon_ip",robotIP,std::string("172.43.50.193"));
+	n.param("cameleon_ip",robotIP,std::string("192.168.1.16"));
 	n.param("cameleon_maxForwardSpeed",maxForwardSpeed,0.5);
 	n.param("cameleon_maxBackwardSpeed",maxBackwardSpeed,0.5);
 	n.param("cameleon_maxTurnSpeed",maxTurnSpeed,0.5);
