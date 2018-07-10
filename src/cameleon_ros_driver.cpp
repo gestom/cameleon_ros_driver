@@ -83,7 +83,7 @@ void commandCallback(const geometry_msgs::Twist::ConstPtr& msg)
 {
 	message.type = MSG_SPEED;
 	message.forward = (int)(msg->linear.x*1000);
-	message.turn = (int)(msg->angular.z*1000)-15;
+	message.turn = (int)(msg->angular.z*1000)-15;		//TODO this is a weird corrective
 	message.flipper = (int)(msg->angular.y*1000);
 	if (message.forward > +maxForwardSpeed*1000) message.forward = maxForwardSpeed*1000;
 	if (message.forward < -maxBackwardSpeed*1000) message.forward = -maxBackwardSpeed*1000;
